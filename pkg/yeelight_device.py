@@ -35,11 +35,7 @@ class YeelightDevice(Device):
 
         self.update_properties()
 
-        has_color = False
-        has_level = False
-
         if self.is_color():
-            has_color = True
             self._type.append('ColorControl')
 
             self.properties['color'] = YeelightProperty(
@@ -52,7 +48,6 @@ class YeelightDevice(Device):
                 },
                 self.color())
         elif gateway_addon.API_VERSION >= 2 and self.is_variable_color_temp():
-            has_color = True
             self._type.append('ColorControl')
 
             self.properties['colorTemperature'] = YeelightProperty(
@@ -68,7 +63,7 @@ class YeelightDevice(Device):
                 },
                 self.color_temp())
 
-        if self.is_dimmable():
+        if self.is_dimmable() and not self.is_color():
             self.properties['level'] = YeelightProperty(
                 self,
                 'level',
@@ -92,11 +87,14 @@ class YeelightDevice(Device):
             },
             self.is_on())
 
-        if has_color and has_level:
-            self.type = 'dimmableColorLight'
-        elif has_color:
+        if self.is_color():
             self.type = 'onOffColorLight'
-        elif has_level:
+        elif gateway_addon.API_VERSION >= 2 and self.is_variable_color_temp():
+            if self.is_dimmable():
+                self.type = 'dimmableColorLight'
+            else:
+                self.type = 'onOffColorLight'
+        elif self.is_dimmable():
             self.type = 'dimmableLight'
         else:
             self.type = 'onOffLight'
