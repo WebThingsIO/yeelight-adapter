@@ -29,9 +29,12 @@ class YeelightDevice(Device):
         self._type = ['OnOffSwitch', 'Light']
 
         self.bulb = Bulb(dev_dict['ip'])
-        self.description = dev_dict['model']
-        self.name = dev_dict['name']
-        self.support = dev_dict['support'].split(' ')
+        self.description = dev_dict['capabilities']['model']
+        self.name = dev_dict['capabilities']['name']
+        if not self.name:
+            self.name = self.description
+
+        self.support = dev_dict['capabilities']['support'].split(' ')
 
         self.update_properties()
 
@@ -115,7 +118,7 @@ class YeelightDevice(Device):
     def update_properties(self):
         """Update the cached properties."""
         try:
-            self.properties = self.bulb.get_properties()
+            self.bulb_properties = self.bulb.get_properties()
         except socket.error:
             pass
 
@@ -133,28 +136,28 @@ class YeelightDevice(Device):
 
     def is_on(self):
         """Determine whether or not the light is on."""
-        return self.properties['power'] == 'on'
+        return self.bulb_properties['power'] == 'on'
 
     def color_temp(self):
         """Determine the current color temperature."""
-        return int(self.properties['ct'])
+        return int(self.bulb_properties['ct'])
 
     def color(self):
         """Determine the current color of the light."""
-        mode = int(self.properties['color_mode'])
+        mode = int(self.bulb_properties['color_mode'])
 
         if mode == 1:
             # RGB mode
-            return '#{:06X}'.format(int(self.properties['rgb']))
+            return '#{:06X}'.format(int(self.bulb_properties['rgb']))
         elif mode == 3:
             # HSV mode
-            return hsv_to_rgb(int(self.properties['hue']),
-                              int(self.properties['sat']),
-                              int(self.properties['bright']))
+            return hsv_to_rgb(int(self.bulb_properties['hue']),
+                              int(self.bulb_properties['sat']),
+                              int(self.bulb_properties['bright']))
         else:
             # Color temperature mode
             return '#000000'
 
     def brightness(self):
         """Determine the current brightness of the light."""
-        return int(self.properties['bright'])
+        return int(self.bulb_properties['bright'])

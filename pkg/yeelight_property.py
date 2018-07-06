@@ -26,7 +26,7 @@ class YeelightProperty(Property):
         value -- the value to set
         """
         try:
-            self.update_properties()
+            self.device.update_properties()
 
             if self.device.is_on():
                 if self.name == 'on':
@@ -46,6 +46,8 @@ class YeelightProperty(Property):
                     self.device.bulb.set_color_temp(value)
                 else:
                     return
+            elif self.name == 'on':
+                self.device.bulb.turn_on()
         except socket.error:
             return
 
