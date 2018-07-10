@@ -61,8 +61,8 @@ class YeelightDevice(Device):
                     'label': 'Color Temperature',
                     'type': 'number',
                     'unit': 'kelvin',
-                    'min': 1700,
-                    'max': 6500,
+                    'minimum': 1700,
+                    'maximum': 6500,
                 },
                 self.color_temp())
 
@@ -75,8 +75,8 @@ class YeelightDevice(Device):
                     'label': 'Brightness',
                     'type': 'number',
                     'unit': 'percent',
-                    'min': 0,
-                    'max': 100,
+                    'minimum': 0,
+                    'maximum': 100,
                 },
                 self.brightness())
 
