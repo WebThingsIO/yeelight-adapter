@@ -1,1 +1,1 @@
-yeelight
+yeelight==0.4.3
