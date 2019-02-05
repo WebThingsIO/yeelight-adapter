@@ -2,7 +2,6 @@
 
 from gateway_addon import Device
 from yeelight import Bulb
-import gateway_addon
 import socket
 import threading
 import time
@@ -50,7 +49,7 @@ class YeelightDevice(Device):
                     'type': 'string',
                 },
                 self.color())
-        elif gateway_addon.API_VERSION >= 2 and self.is_variable_color_temp():
+        elif self.is_variable_color_temp():
             self._type.append('ColorControl')
 
             self.properties['colorTemperature'] = YeelightProperty(
@@ -59,7 +58,7 @@ class YeelightDevice(Device):
                 {
                     '@type': 'ColorTemperatureProperty',
                     'label': 'Color Temperature',
-                    'type': 'number',
+                    'type': 'integer',
                     'unit': 'kelvin',
                     'minimum': 1700,
                     'maximum': 6500,
@@ -73,7 +72,7 @@ class YeelightDevice(Device):
                 {
                     '@type': 'BrightnessProperty',
                     'label': 'Brightness',
-                    'type': 'number',
+                    'type': 'integer',
                     'unit': 'percent',
                     'minimum': 0,
                     'maximum': 100,
@@ -92,7 +91,7 @@ class YeelightDevice(Device):
 
         if self.is_color():
             self.type = 'onOffColorLight'
-        elif gateway_addon.API_VERSION >= 2 and self.is_variable_color_temp():
+        elif self.is_variable_color_temp():
             if self.is_dimmable():
                 self.type = 'dimmableColorLight'
             else:
