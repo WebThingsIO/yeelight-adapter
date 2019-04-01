@@ -1,4 +1,4 @@
-"""Yeelight adapter for Mozilla IoT Gateway."""
+"""Yeelight adapter for Mozilla WebThings Gateway."""
 
 from gateway_addon import Adapter
 from yeelight import discover_bulbs

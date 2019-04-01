@@ -1,6 +1,6 @@
 # yeelight-adapter
 
-Yeelight smart bulb adapter for Mozilla IoT Gateway.
+Yeelight smart bulb adapter for Mozilla WebThings Gateway.
 
 # Supported Devices
 
