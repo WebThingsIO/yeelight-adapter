@@ -33,6 +33,9 @@ class YeelightAdapter(Adapter):
 
         timeout -- Timeout in seconds at which to quit pairing
         """
+        if self.pairing:
+            return
+
         self.pairing = True
         for dev in discover_bulbs():
             if not self.pairing:
@@ -42,6 +45,8 @@ class YeelightAdapter(Adapter):
             if _id not in self.devices:
                 device = YeelightDevice(self, _id, dev)
                 self.handle_device_added(device)
+
+        self.pairing = False
 
     def cancel_pairing(self):
         """Cancel the pairing process."""
