@@ -52,6 +52,14 @@ class YeelightDevice(Device):
         elif self.is_variable_color_temp():
             self._type.append('ColorControl')
 
+            if self.bulb.model:
+                specs = self.bulb.get_model_specs()['color_temp']
+                min_kelvin = specs['min']
+                max_kelvin = specs['max']
+            else:
+                min_kelvin = 1700
+                max_kelvin = 6500
+
             self.properties['colorTemperature'] = YeelightProperty(
                 self,
                 'colorTemperature',
@@ -60,8 +68,8 @@ class YeelightDevice(Device):
                     'label': 'Color Temperature',
                     'type': 'integer',
                     'unit': 'kelvin',
-                    'minimum': 1700,
-                    'maximum': 6500,
+                    'minimum': min_kelvin,
+                    'maximum': max_kelvin,
                 },
                 self.color_temp())
 
