@@ -9,11 +9,11 @@ import time
 
 sys.path.append(path.join(path.dirname(path.abspath(__file__)), 'lib'))
 
-from pkg.yeelight_adapter import YeelightAdapter  # flake8: noqa
+from pkg.yeelight_adapter import YeelightAdapter  # noqa: E402
 
 
 _API_VERSION = {
-    'min': 1,
+    'min': 2,
     'max': 2,
 }
 _ADAPTER = None
