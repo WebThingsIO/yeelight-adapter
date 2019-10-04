@@ -1,7 +1,7 @@
 {
   "name": "yeelight-adapter",
   "display_name": "Yeelight",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Yeelight smart bulb adapter plugin for Mozilla WebThings Gateway",
   "author": "Mozilla IoT",
   "main": "main.py",
@@ -22,9 +22,11 @@
   },
   "files": [
     "LICENSE",
+    "README.md",
     "SHA256SUMS",
     "lib",
     "main.py",
+    "manifest.json",
     "pkg/__init__.py",
     "pkg/yeelight_adapter.py",
     "pkg/yeelight_device.py",
