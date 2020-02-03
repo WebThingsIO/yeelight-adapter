@@ -28,13 +28,19 @@ class YeelightProperty(Property):
         try:
             self.device.update_properties()
 
-            if self.device.is_on():
-                if self.name == 'on':
-                    if value:
-                        pass
-                    else:
-                        self.device.bulb.turn_off()
-                elif self.name == 'color':
+            if value == self.value:
+                return
+
+            on = self.device.is_on()
+
+            if self.name == 'on':
+                if value:
+                    self.device.bulb.turn_on()
+                else:
+                    self.device.bulb.turn_off()
+            elif on:
+                # only change the other properties if the bulb is already on
+                if self.name == 'color':
                     self.device.bulb.set_rgb(int(value[1:3], 16),
                                              int(value[3:5], 16),
                                              int(value[5:7], 16))
@@ -46,8 +52,6 @@ class YeelightProperty(Property):
                     self.device.bulb.set_color_temp(value)
                 else:
                     return
-            elif self.name == 'on':
-                self.device.bulb.turn_on()
         except socket.error:
             return
 
