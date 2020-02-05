@@ -29,6 +29,7 @@ class YeelightProperty(Property):
             self.device.update_properties()
 
             if value == self.value:
+                self.device.notify_property_changed(self)
                 return
 
             on = self.device.is_on()
