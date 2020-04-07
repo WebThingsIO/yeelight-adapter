@@ -45,12 +45,15 @@ class YeelightDevice(Device):
                 'color',
                 {
                     '@type': 'ColorProperty',
-                    'label': 'Color',
+                    'title': 'Color',
                     'type': 'string',
                 },
-                self.color())
-        elif self.is_variable_color_temp():
-            self._type.append('ColorControl')
+                self.color()
+            )
+
+        if self.is_variable_color_temp():
+            if 'ColorControl' not in self._type:
+                self._type.append('ColorControl')
 
             if self.bulb.model:
                 specs = self.bulb.get_model_specs()['color_temp']
@@ -65,49 +68,57 @@ class YeelightDevice(Device):
                 'colorTemperature',
                 {
                     '@type': 'ColorTemperatureProperty',
-                    'label': 'Color Temperature',
+                    'title': 'Color Temperature',
                     'type': 'integer',
                     'unit': 'kelvin',
                     'minimum': min_kelvin,
                     'maximum': max_kelvin,
                 },
-                self.color_temp())
+                self.color_temp()
+            )
 
-        if self.is_dimmable() and not self.is_color():
+        if self.is_color() and self.is_variable_color_temp():
+            self.properties['colorMode'] = YeelightProperty(
+                self,
+                'colorMode',
+                {
+                    '@type': 'ColorModeProperty',
+                    'title': 'Color Mode',
+                    'type': 'string',
+                    'enum': [
+                        'color',
+                        'temperature',
+                    ],
+                    'readOnly': True,
+                },
+                self.color_mode()
+            )
+
+        if self.is_dimmable():
             self.properties['level'] = YeelightProperty(
                 self,
                 'level',
                 {
                     '@type': 'BrightnessProperty',
-                    'label': 'Brightness',
+                    'title': 'Brightness',
                     'type': 'integer',
                     'unit': 'percent',
                     'minimum': 0,
                     'maximum': 100,
                 },
-                self.brightness())
+                self.brightness()
+            )
 
         self.properties['on'] = YeelightProperty(
             self,
             'on',
             {
                 '@type': 'OnOffProperty',
-                'label': 'On/Off',
+                'title': 'On/Off',
                 'type': 'boolean',
             },
-            self.is_on())
-
-        if self.is_color():
-            self.type = 'onOffColorLight'
-        elif self.is_variable_color_temp():
-            if self.is_dimmable():
-                self.type = 'dimmableColorLight'
-            else:
-                self.type = 'onOffColorLight'
-        elif self.is_dimmable():
-            self.type = 'dimmableLight'
-        else:
-            self.type = 'onOffLight'
+            self.is_on()
+        )
 
         t = threading.Thread(target=self.poll)
         t.daemon = True
@@ -164,6 +175,14 @@ class YeelightDevice(Device):
         else:
             # Color temperature mode
             return '#000000'
+
+    def color_mode(self):
+        """Determine the current color mode."""
+        mode = int(self.bulb_properties['color_mode'])
+        if mode == 2:
+            return 'temperature'
+
+        return 'color'
 
     def brightness(self):
         """Determine the current brightness of the light."""

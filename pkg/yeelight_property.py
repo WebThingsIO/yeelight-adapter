@@ -25,12 +25,12 @@ class YeelightProperty(Property):
 
         value -- the value to set
         """
+        color_mode_prop = None
+        if 'colorMode' in self.device.properties:
+            color_mode_prop = self.device.properties['colorMode']
+
         try:
             self.device.update_properties()
-
-            if value == self.value:
-                self.device.notify_property_changed(self)
-                return
 
             on = self.device.is_on()
 
@@ -45,12 +45,22 @@ class YeelightProperty(Property):
                     self.device.bulb.set_rgb(int(value[1:3], 16),
                                              int(value[3:5], 16),
                                              int(value[5:7], 16))
+
+                    # update the colorMode property
+                    if color_mode_prop is not None:
+                        color_mode_prop.set_cached_value('color')
+                        self.device.notify_property_changed(color_mode_prop)
                 elif self.name == 'level':
                     self.device.bulb.set_brightness(value)
                 elif self.name == 'colorTemperature':
                     value = max(value, self.description['minimum'])
                     value = min(value, self.description['maximum'])
                     self.device.bulb.set_color_temp(value)
+
+                    # update the colorMode property
+                    if color_mode_prop is not None:
+                        color_mode_prop.set_cached_value('temperature')
+                        self.device.notify_property_changed(color_mode_prop)
                 else:
                     return
         except socket.error:
@@ -69,6 +79,8 @@ class YeelightProperty(Property):
             value = self.device.brightness()
         elif self.name == 'colorTemperature':
             value = self.device.color_temp()
+        elif self.name == 'colorMode':
+            value = self.device.color_mode()
         else:
             return
 
