@@ -1,8 +1,7 @@
 """Yeelight adapter for Mozilla WebThings Gateway."""
 
 from gateway_addon import Device
-from yeelight import Bulb
-import socket
+from yeelight import Bulb, BulbException
 import threading
 import time
 
@@ -137,8 +136,9 @@ class YeelightDevice(Device):
         """Update the cached properties."""
         try:
             self.bulb_properties = self.bulb.get_properties()
-        except socket.error:
-            pass
+            self.connected_notify(True)
+        except BulbException:
+            self.connected_notify(False)
 
     def is_dimmable(self):
         """Determine whether or not the light is dimmable."""

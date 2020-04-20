@@ -1,7 +1,7 @@
 """Yeelight adapter for Mozilla WebThings Gateway."""
 
 from gateway_addon import Property
-import socket
+from yeelight import BulbException
 
 
 class YeelightProperty(Property):
@@ -63,7 +63,7 @@ class YeelightProperty(Property):
                         self.device.notify_property_changed(color_mode_prop)
                 else:
                     return
-        except socket.error:
+        except BulbException:
             return
 
         self.set_cached_value(value)
