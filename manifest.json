@@ -9,7 +9,7 @@
       "strict_min_version": "0.10.0"
     }
   },
-  "homepage_url": "https://github.com/mozilla-iot/yeelight-adapter",
+  "homepage_url": "https://github.com/mozilla-iot/yeelight-adapter#readme",
   "id": "yeelight-adapter",
   "license": "MPL-2.0",
   "manifest_version": 1,
