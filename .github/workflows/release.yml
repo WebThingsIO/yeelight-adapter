@@ -10,10 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v1
+      - uses: actions/setup-node@v1
         with:
-          python-version: 3.7
+          node-version: 8
       - name: Set env
         run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:11})
       - name: Package project

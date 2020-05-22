@@ -1,28 +1,17 @@
 #!/bin/bash -e
 
-version=$(grep version package.json | cut -d: -f2 | cut -d\" -f2)
+rm -rf node_modules
 
-# Clean up from previous releases
-rm -rf *.tgz package SHA256SUMS lib
+npm install --production
 
-# Prep new package
-mkdir lib package
+shasum --algorithm 256 manifest.json package.json *.js lib/*.js LICENSE README.md > SHA256SUMS
 
-# Pull down Python dependencies
-pip3 install -r requirements.txt -t lib --no-binary yeelight --prefix ""
+find node_modules \( -type f -o -type l \) -exec shasum --algorithm 256 {} \; >> SHA256SUMS
 
-# Put package together
-cp -r lib pkg LICENSE manifest.json package.json *.py README.md package/
-find package -type f -name '*.pyc' -delete
-find package -type d -empty -delete
+TARFILE=`npm pack`
 
-# Generate checksums
-cd package
-find . -type f \! -name SHA256SUMS -exec shasum --algorithm 256 {} \; >> SHA256SUMS
-cd -
-
-# Make the tarball
-TARFILE="yeelight-adapter-${version}.tgz"
+tar xzf ${TARFILE}
+cp -r node_modules ./package
 tar czf ${TARFILE} package
 
 shasum --algorithm 256 ${TARFILE} > ${TARFILE}.sha256sum

@@ -3,7 +3,7 @@
   "description": "Yeelight smart bulb adapter plugin for Mozilla WebThings Gateway",
   "gateway_specific_settings": {
     "webthings": {
-      "exec": "python3 {path}/main.py",
+      "exec": "{nodeLoader} {path}",
       "primary_type": "adapter",
       "strict_max_version": "*",
       "strict_min_version": "0.10.0"
@@ -15,5 +15,5 @@
   "manifest_version": 1,
   "name": "Yeelight",
   "short_name": "Yeelight",
-  "version": "0.3.1"
+  "version": "0.4.0"
 }
