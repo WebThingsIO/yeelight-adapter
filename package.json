@@ -1,7 +1,6 @@
 {
   "name": "yeelight-adapter",
-  "display_name": "Yeelight",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Yeelight smart bulb adapter plugin for Mozilla WebThings Gateway",
   "main": "index.js",
   "scripts": {
@@ -11,12 +10,6 @@
     "type": "git",
     "url": "git+https://github.com/mozilla-iot/yeelight-adapter.git"
   },
-  "keywords": [
-    "mozilla",
-    "iot",
-    "adapter",
-    "yeelight"
-  ],
   "author": "Mozilla IoT",
   "license": "MPL-2.0",
   "bugs": {
@@ -29,7 +22,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.0.0"
+    "eslint": "^7.5.0"
   },
   "files": [
     "LICENSE",
@@ -41,13 +34,5 @@
     "lib/yeelight-property.js",
     "manifest.json",
     "node_modules"
-  ],
-  "moziot": {
-    "api": {
-      "min": 2,
-      "max": 2
-    },
-    "plugin": true,
-    "exec": "{nodeLoader} {path}"
-  }
+  ]
 }
