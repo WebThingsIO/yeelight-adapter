@@ -1,6 +1,6 @@
 {
   "name": "yeelight-adapter",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Yeelight smart bulb adapter plugin for WebThings Gateway",
   "main": "index.js",
   "scripts": {
